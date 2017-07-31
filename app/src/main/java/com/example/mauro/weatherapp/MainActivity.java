@@ -1,5 +1,8 @@
 package com.example.mauro.weatherapp;
 
+import android.content.Intent;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.mauro.weatherapp.data.MyList;
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private List<MyList> myList;
     private WeatherAdapter weatherAdapter;
 
+    private DrawerLayout drawerLayout;
     private TextView textViewCity;
     private TextView textViewType;
     private TextView textViewDays;
@@ -56,11 +61,22 @@ public class MainActivity extends AppCompatActivity {
 
         textViewType.setText(getString(R.string.type_request));
         textViewDays.setText(getString(R.string.num_days, DAYS));
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        ab = getSupportActionBar();
-//        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-//        ab.setDisplayHomeAsUpEnabled(true);
+
+
+        // Set up the toolbar.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        // Set up the navigation drawer.
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+        }
 
         setUpRecyclerView();
 
@@ -119,5 +135,25 @@ public class MainActivity extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case R.id.list_navigation_menu_item:
+                                // Do nothing, we're already on that screen
+                                break;
+                            default:
+                                break;
+                        }
+                        // Close the navigation drawer when an item is selected.
+                        menuItem.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
     }
 }

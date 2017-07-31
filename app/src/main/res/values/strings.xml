@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="type_request">DAILY</string>
+    <string name="num_days">%1$d Days</string>
+</resources>
